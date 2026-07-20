@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 import Aside from "./Aside";
+import { Link } from 'react-router'
 
 function Login() {
   const {
@@ -47,12 +48,12 @@ function Login() {
               type="button"
               defaultValue="登入"
             />
-            <a
+            <Link
+              to='/register'
               className="block text-[#333] font-bold no-underline text-center"
-              href="#signUpPage"
             >
               註冊帳號
-            </a>
+            </Link>
           </form>
         </div>
       </div>

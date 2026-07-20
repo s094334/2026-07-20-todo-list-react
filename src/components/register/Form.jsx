@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form"
 import { fields, subTitle } from './data'
+import { signUp } from '../../api'
+import { Link } from 'react-router'
 
 const Input = ({ label, name, register, required, rules = {}, errors, ...props }) => (
   <>
@@ -20,7 +22,9 @@ function Form() {
     register,
     formState: { errors },
     handleSubmit } = useForm()
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = async (data) => {
+    await signUp(data.email, data.password, data.name)
+  }
 
   return (
     <div>
@@ -38,12 +42,12 @@ function Form() {
           type="submit"
           defaultValue="註冊帳號"
         />
-        <a
+        <Link
+          to="/"
           className="block text-[#333] font-bold no-underline text-center"
-          href="#loginPage"
         >
           登入
-        </a>
+        </Link>
       </form>
     </div>
   )

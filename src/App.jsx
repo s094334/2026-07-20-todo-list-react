@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import './App.css'
+import { Routes, Route } from "react-router";
 import Login from './components/Login'
 import Register from './components/Register'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-    <Register />
+    <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+    </Routes>
     </>
   )
 }
