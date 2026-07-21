@@ -1,12 +1,23 @@
-import GetTodo from "./GetTodo"
+import { useState, useEffect } from "react";
 import Nav from "./Nav"
-import AddTodoBtn from "./AddTodoBtn";
+import AddTodoBtn from "./AddBtn";
 import { filterTabs } from './data'
-import FilterTodoBtn from "./FilterTodoBtn";
-
-const baseUrl = 'https://todolist-api.hexschool.io';
+import FilterTodoBtn from "./FilterBtn";
+import { baseUrl, getTodos } from "../../api";
 
 function Todolist () {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const data = await getTodos(token);
+      console.log(data)
+      setTodos(data)
+    };
+
+    fetchTodos();
+  }, [])
+
   return (
     <section
       id="todoListPage"
@@ -38,7 +49,6 @@ function Todolist () {
         </div>
       </div>
     </section>
-
   )
 };
 
