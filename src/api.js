@@ -63,3 +63,19 @@ export async function toggleStatus(id) {
     console.log(error.response?.data);
   }
 }
+
+export async function editTodo(id, content) {
+  try {
+    const { data } = await axios.put(`${baseUrl}/todos/${id}`,
+      { content },
+      {
+        headers: {
+          Authorization: token,
+        }
+      }
+    );
+
+  } catch(error) {
+    console.log(error.response?.data);
+  }
+}

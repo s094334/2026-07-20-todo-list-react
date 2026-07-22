@@ -4,7 +4,7 @@ import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
 import RenderData from "./RenderData"
-import { getTodos, addTodo, deleteTodo, toggleStatus } from "../../api";
+import { getTodos, addTodo, deleteTodo, toggleStatus, editTodo } from "../../api";
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
@@ -34,6 +34,11 @@ function Todolist () {
     setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, status: !todo.status} : todo));
   }
 
+  const handleEditTodo = async (id, content) => {
+    await editTodo(id, content);
+    setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, content} : todo));
+  }
+
   return (
     <section
       id="todoListPage"
@@ -59,7 +64,8 @@ function Todolist () {
                     key={todo.id} 
                     {...todo}
                     onDelete={ handleDeleteTodo }
-                    onToggle={ handleToggleStatus } />)
+                    onToggle={ handleToggleStatus }
+                    onEdit={ handleEditTodo } />)
                 }
               </ul>
               <div className="flex justify-between">
