@@ -8,7 +8,9 @@ import { getTodos, addTodo, deleteTodo, toggleStatus, editTodo } from "../../api
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState("all");
   console.log("目前 todos", todos);
+  console.log("目前 filter", filter);
 
   useEffect(() => {
     const todos = async () => {
@@ -39,6 +41,17 @@ function Todolist () {
     setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, content} : todo));
   }
 
+  const filterTodos = todos.filter((todo) => {
+    switch (filter) {
+      case 'pending':
+        return !todo.status;
+      case 'completed':
+        return todo.status;
+      default:
+        return true;
+    }
+  })
+
   return (
     <section
       id="todoListPage"
@@ -47,19 +60,24 @@ function Todolist () {
       <Nav />
       <div className="h-screen mx-auto px-8 py-4">
         <div className="w-full mx-auto md:w-[500px]">
-          <AddBtn onAdd={ handleAddTodo }  />
+          <AddBtn onAdd={ handleAddTodo } />
           <div className="bg-white rounded-[10px] shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
             <ul className="flex justify-evenly">
               {
                 filterTabs.map((filterTab) => {
-                  return <FilterTodoBtn key={ filterTab.dataTab } {...filterTab}/>
-                })
+                  return (
+                    <FilterTodoBtn 
+                      key={ filterTab.dataTab } 
+                      {...filterTab}
+                      isSelected={filter === filterTab.dataTab}
+                      onFilter={ setFilter }/>
+                )})
               }
             </ul>
             <div className="pt-[23px] pl-6 pr-[17px] pb-8">
               <ul className="mb-2 overflow-y-auto max-h-[400px]">
                 {
-                  todos.map((todo) => 
+                  filterTodos.map((todo) => 
                   <RenderData
                     key={todo.id} 
                     {...todo}
