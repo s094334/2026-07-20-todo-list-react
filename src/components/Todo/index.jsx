@@ -52,6 +52,17 @@ function Todolist () {
     }
   })
 
+  const completedTodos = todos.filter((todo) => todo.status);
+
+  const handleClearCompleted = async () => {
+    await Promise.all(
+      completedTodos.map((todo) => deleteTodo(todo.id))
+    );
+    setTodos((todos) => 
+      todos.filter((todo) => !todo.status)
+    )
+  }
+
   return (
     <section
       id="todoListPage"
@@ -87,8 +98,9 @@ function Todolist () {
                 }
               </ul>
               <div className="flex justify-between">
-                <p className="text-sm text-[#333]"> 0 個已完成項目</p>
-                <button className="text-sm text-[#9F9A91] no-underline">
+                <p className="text-sm text-[#333]"> {completedTodos.length} 個已完成項目</p>
+                <button 
+                  className="text-sm text-[#9F9A91] cursor-pointer" onClick={ handleClearCompleted }>
                   清除已完成項目
                 </button>
               </div>
