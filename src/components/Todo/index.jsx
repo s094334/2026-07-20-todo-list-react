@@ -1,22 +1,29 @@
 import { useState, useEffect } from "react";
 import Nav from "./Nav"
-import AddTodoBtn from "./AddBtn";
+import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
-import { baseUrl, getTodos } from "../../api";
+import RenderData from "./RenderData"
+import { getTodos, addTodo } from "../../api";
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
+  console.log("目前 todos", todos);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await getTodos(token);
-      console.log(data)
-      setTodos(data)
+    const todos = async () => {
+      const todos = await getTodos();
+      setTodos(todos)
     };
 
-    fetchTodos();
+    todos();
   }, [])
+
+  const handleAddTodo = async (content) => {
+    const result = await addTodo(content);
+    console.log(result)
+    setTodos((todos) => [...todos, result]);
+  }
 
   return (
     <section
@@ -26,7 +33,7 @@ function Todolist () {
       <Nav />
       <div className="h-screen mx-auto px-8 py-4">
         <div className="w-full mx-auto md:w-[500px]">
-          <AddTodoBtn />
+          <AddBtn onAdd={ handleAddTodo }  />
           <div className="bg-white rounded-[10px] shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
             <ul className="flex justify-evenly">
               {
@@ -37,6 +44,9 @@ function Todolist () {
             </ul>
             <div className="pt-[23px] pl-6 pr-[17px] pb-8">
               <ul className="mb-2 overflow-y-auto max-h-[400px]">
+                {
+                  todos.map((todo) => <RenderData key={todo.id} {...todo} />)
+                }
               </ul>
               <div className="flex justify-between">
                 <p className="text-sm text-[#333]"> 0 個已完成項目</p>

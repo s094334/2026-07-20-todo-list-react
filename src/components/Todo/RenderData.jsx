@@ -1,0 +1,25 @@
+function RenderData({ id, status, content }) {
+  return (
+    <li data-id={id} className="flex items-center mb-[17px] group">
+      <label className="w-full flex items-center border-b border-[#e5e5e5] pb-[15px] text-[#333] leading-[20.27px]">
+        <input
+          className="peer w-5 h-5 border border-[#9F9A91] rounded-[5px] mr-4"
+          type="checkbox"
+          checked={status}
+          onChange={() => {}}
+        />
+        <span className="transition-all duration-[400ms] peer-checked:text-[#9F9A91] peer-checked:line-through">
+          {content}
+        </span>
+      </label>
+      <button className="text-white text-sm font-bold bg-black border-2 border-black rounded-[5px] px-2 py-1 mb-[15px] whitespace-nowrap hover:text-black hover:bg-white">
+        編輯
+      </button>
+      <button className="ml-[17px] mb-[15px] flex items-center justify-center w-6 h-6 text-xl leading-none text-[#333] opacity-0 transition-opacity group-hover:opacity-100">
+        ×
+      </button>
+    </li>
+  )
+};
+
+export default RenderData;

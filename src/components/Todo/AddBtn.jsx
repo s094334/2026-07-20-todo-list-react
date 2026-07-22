@@ -1,19 +1,34 @@
 
-function AddTodoBtn () {
+import { useForm } from "react-hook-form";
+
+function AddBtn ({ onAdd }) {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit } = useForm()
+
+  const onSubmit = async (data) => {
+    await onAdd(data.content)
+  }
+
   return (
-    <div className="relative flex w-full mb-4 shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
+    <form 
+      onSubmit={ handleSubmit(onSubmit) }
+      className="relative flex w-full mb-4 shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
       <input
         className="relative w-full h-[47px] pl-4 text-base bg-white rounded-[10px]"
         type="text"
         placeholder="請輸入待辦事項"
+        { ...register("content") }
       />
       <button
+        type="submit"
         className="absolute top-1 right-1 block w-10 h-[39px] p-[10px] text-center text-[20px] leading-none text-white no-underline bg-[#333] rounded-[10px]"
       >
         +
       </button>
-    </div>
+    </form>
   )
 };
 
-export default AddTodoBtn;
+export default AddBtn;
