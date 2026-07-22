@@ -4,7 +4,7 @@ import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
 import RenderData from "./RenderData"
-import { getTodos, addTodo } from "../../api";
+import { getTodos, addTodo, deleteTodo } from "../../api";
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
@@ -21,8 +21,12 @@ function Todolist () {
 
   const handleAddTodo = async (content) => {
     const result = await addTodo(content);
-    console.log(result)
     setTodos((todos) => [...todos, result]);
+  }
+
+  const handleDeleteTodo = async (id) => {
+    const result = await deleteTodo(id);
+    setTodos((todos) => todos.filter((todo) => todo.id !== id));
   }
 
   return (
@@ -45,7 +49,11 @@ function Todolist () {
             <div className="pt-[23px] pl-6 pr-[17px] pb-8">
               <ul className="mb-2 overflow-y-auto max-h-[400px]">
                 {
-                  todos.map((todo) => <RenderData key={todo.id} {...todo} />)
+                  todos.map((todo) => 
+                  <RenderData
+                    key={todo.id} 
+                    {...todo}
+                    onDelete={ handleDeleteTodo } />)
                 }
               </ul>
               <div className="flex justify-between">

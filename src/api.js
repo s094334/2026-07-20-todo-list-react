@@ -32,3 +32,19 @@ export async function addTodo(content) {
     console.log(error.response?.data);
   }
 }
+
+
+export async function deleteTodo(id) {
+  try {
+    const { data } = await axios.delete(`${baseUrl}/todos/${id}`,
+      {
+        headers: {
+          Authorization: token,
+        }
+      }
+    );
+    
+  } catch (error) {
+    console.log(error.response?.data);
+  }
+}
