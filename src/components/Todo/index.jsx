@@ -4,7 +4,7 @@ import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
 import RenderData from "./RenderData"
-import { getTodos, addTodo, deleteTodo } from "../../api";
+import { getTodos, addTodo, deleteTodo, toggleStatus } from "../../api";
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
@@ -12,8 +12,8 @@ function Todolist () {
 
   useEffect(() => {
     const todos = async () => {
-      const todos = await getTodos();
-      setTodos(todos)
+      const data = await getTodos();
+      setTodos(data)
     };
 
     todos();
@@ -25,8 +25,13 @@ function Todolist () {
   }
 
   const handleDeleteTodo = async (id) => {
-    const result = await deleteTodo(id);
+    await deleteTodo(id);
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
+  }
+
+  const handleToggleStatus = async (id) => {
+    await toggleStatus(id);
+    setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, status: !todo.status} : todo));
   }
 
   return (
@@ -53,7 +58,8 @@ function Todolist () {
                   <RenderData
                     key={todo.id} 
                     {...todo}
-                    onDelete={ handleDeleteTodo } />)
+                    onDelete={ handleDeleteTodo }
+                    onToggle={ handleToggleStatus } />)
                 }
               </ul>
               <div className="flex justify-between">

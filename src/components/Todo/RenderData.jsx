@@ -1,4 +1,4 @@
-function RenderData({ id, status, content, onDelete }) {
+function RenderData({ id, status, content, onDelete, onToggle }) {
   return (
     <li data-id={id} className="flex items-center mb-[17px] group">
       <label className="w-full flex items-center border-b border-[#e5e5e5] pb-[15px] text-[#333] leading-[20.27px]">
@@ -6,7 +6,7 @@ function RenderData({ id, status, content, onDelete }) {
           className="peer w-5 h-5 border border-[#9F9A91] rounded-[5px] mr-4"
           type="checkbox"
           checked={status}
-          onChange={() => {}}
+          onChange={() => onToggle(id) }
         />
         <span className="transition-all duration-[400ms] peer-checked:text-[#9F9A91] peer-checked:line-through">
           {content}

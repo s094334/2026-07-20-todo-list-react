@@ -33,7 +33,6 @@ export async function addTodo(content) {
   }
 }
 
-
 export async function deleteTodo(id) {
   try {
     const { data } = await axios.delete(`${baseUrl}/todos/${id}`,
@@ -45,6 +44,22 @@ export async function deleteTodo(id) {
     );
     
   } catch (error) {
+    console.log(error.response?.data);
+  }
+}
+
+export async function toggleStatus(id) {
+  try {
+    const { data } = await axios.patch(`${baseUrl}/todos/${id}/toggle`,
+      "",
+      {
+        headers: {
+          Authorization: token,
+        }
+      }
+    );
+
+  } catch(error) {
     console.log(error.response?.data);
   }
 }
