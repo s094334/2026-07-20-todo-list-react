@@ -4,10 +4,13 @@ function AddBtn ({ onAdd }) {
   const {
     register,
     formState: { errors },
-    handleSubmit } = useForm()
+    handleSubmit,
+    reset
+  } = useForm()
 
   const onSubmit = async (data) => {
-    await onAdd(data.content)
+    await onAdd(data.content);
+    reset();
   }
 
   return (
