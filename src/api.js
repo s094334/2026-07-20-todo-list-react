@@ -2,6 +2,34 @@ import axios from "axios";
 
 const baseUrl = "https://todolist-api.hexschool.io";
 
+export async function signUp(signUpEmail, signUpPwd, nickName) {
+  try {
+    const { data } = await axios.post(`${baseUrl}/users/sign_up`,
+      { 
+        "email": signUpEmail,
+        "password": signUpPwd,
+        "nickname": nickName
+      }
+    );
+  } catch (error) {
+      throw error;
+    }
+}
+
+export async function signIn(signInEmail, signInPwd) {
+  try {
+    const { data } = await axios.post(`${baseUrl}/users/sign_in`,
+      {
+        "email": signInEmail,
+        "password": signInPwd
+      }
+    );
+    return data;
+  } catch (error) {
+      throw error;
+    }
+}
+
 export async function getTodos(config) {
   try {
     const { data } = await axios.get(`${baseUrl}/todos/`,{
@@ -10,6 +38,7 @@ export async function getTodos(config) {
       },
       ...config
     })
+
     return data.data;
 
   } catch (error) {
