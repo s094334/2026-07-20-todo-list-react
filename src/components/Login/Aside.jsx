@@ -1,5 +1,5 @@
-import asideLg from "../../assets/login/aside-lg.png"
-import asideSm from "../../assets/login/aside-sm.png"
+import asideLg from "../../assets/Login/aside-lg.png"
+import asideSm from "../../assets/Login/aside-sm.png"
 
 function Aside () {
   return (
