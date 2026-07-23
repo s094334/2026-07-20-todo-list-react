@@ -1,12 +1,15 @@
 import { useForm } from "react-hook-form";
 
-function AddBtn ({ onAdd }) {
+function AddBtn ({ onAdd, isLoading }) {
   const {
     register,
     formState: { errors },
     handleSubmit,
-    reset
+    reset,
+    watch
   } = useForm()
+
+  const content = watch("content");
 
   const onSubmit = async (data) => {
     await onAdd(data.content);
@@ -25,7 +28,8 @@ function AddBtn ({ onAdd }) {
       />
       <button
         type="submit"
-        className="absolute top-1 right-1 block w-10 h-[39px] p-[10px] text-center text-[20px] leading-none text-white no-underline bg-[#333] rounded-[10px]"
+        disabled={ isLoading || !content?.trim() }
+        className="absolute top-1 right-1 block w-10 h-[39px] p-[10px] text-center text-[20px] leading-none text-white no-underline bg-[#333] rounded-[10px] disabled:bg-gray-300"
       >
         +
       </button>

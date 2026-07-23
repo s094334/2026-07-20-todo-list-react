@@ -12,7 +12,7 @@ export async function getTodos() {
     return data.data;
 
   } catch (error) {
-    console.log(error.response?.data)
+    throw error;
   }
 }
 
@@ -29,7 +29,7 @@ export async function addTodo(content) {
     return data.newTodo;
 
   } catch (error) {
-    console.log(error.response?.data);
+    throw error;
   }
 }
 
@@ -44,7 +44,7 @@ export async function deleteTodo(id) {
     );
     
   } catch (error) {
-    console.log(error.response?.data);
+    throw error
   }
 }
 
@@ -60,7 +60,7 @@ export async function toggleStatus(id) {
     );
 
   } catch(error) {
-    console.log(error.response?.data);
+    throw error
   }
 }
 
@@ -76,6 +76,6 @@ export async function editTodo(id, content) {
     );
 
   } catch(error) {
-    console.log(error.response?.data);
+    throw error
   }
 }

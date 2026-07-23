@@ -9,36 +9,77 @@ import { getTodos, addTodo, deleteTodo, toggleStatus, editTodo } from "../../api
 function Todolist () {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState("all");
-  console.log("目前 todos", todos);
-  console.log("目前 filter", filter);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorLog, setErrorLog] = useState('');
+  console.log("error", errorLog);
 
   useEffect(() => {
     const todos = async () => {
-      const data = await getTodos();
-      setTodos(data)
+      setIsLoading(true);
+      setErrorLog(''); 
+      try {
+        const data = await getTodos();
+        setTodos(data);
+      } catch (error) {
+        setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+      } finally {
+      setIsLoading(false);
+    }
     };
 
     todos();
   }, [])
 
   const handleAddTodo = async (content) => {
-    const result = await addTodo(content);
-    setTodos((todos) => [...todos, result]);
+    setIsLoading(true);
+    setErrorLog(''); 
+    try {
+      const result = await addTodo(content);
+      setTodos((todos) => [...todos, result]);
+    } catch (error) {
+      setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const handleDeleteTodo = async (id) => {
-    await deleteTodo(id);
-    setTodos((todos) => todos.filter((todo) => todo.id !== id));
+    setIsLoading(true);
+    setErrorLog('');
+    try {
+      await deleteTodo(id);
+      setTodos((todos) => todos.filter((todo) => todo.id !== id));
+    } catch (error) {
+        setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const handleToggleStatus = async (id) => {
-    await toggleStatus(id);
-    setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, status: !todo.status} : todo));
+    setIsLoading(true);
+    setErrorLog('');
+    try {
+      await toggleStatus(id);
+      setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, status: !todo.status} : todo));
+    } catch (error) {
+      setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const handleEditTodo = async (id, content) => {
-    await editTodo(id, content);
-    setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, content} : todo));
+    setIsLoading(true);
+    setErrorLog('');
+    try {
+      await editTodo(id, content);
+      setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, content} : todo));
+    } catch (error) {
+      setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const filterTodos = todos.filter((todo) => {
@@ -55,12 +96,20 @@ function Todolist () {
   const completedTodos = todos.filter((todo) => todo.status);
 
   const handleClearCompleted = async () => {
-    await Promise.all(
-      completedTodos.map((todo) => deleteTodo(todo.id))
-    );
-    setTodos((todos) => 
-      todos.filter((todo) => !todo.status)
-    )
+    setIsLoading(true);
+    try {
+      await Promise.all(
+        completedTodos.map((todo) => deleteTodo(todo.id))
+      );
+      setTodos((todos) => 
+        todos.filter((todo) => !todo.status)
+      )
+    } catch (error) {
+      setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+    } finally {
+      setIsLoading(false);
+    }
+    
   }
 
   return (
@@ -71,7 +120,7 @@ function Todolist () {
       <Nav />
       <div className="h-screen mx-auto px-8 py-4">
         <div className="w-full mx-auto md:w-[500px]">
-          <AddBtn onAdd={ handleAddTodo } />
+          <AddBtn onAdd={ handleAddTodo } isLoading={ isLoading }/>
           <div className="bg-white rounded-[10px] shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
             <ul className="flex justify-evenly">
               {
@@ -87,6 +136,9 @@ function Todolist () {
             </ul>
             <div className="pt-[23px] pl-6 pr-[17px] pb-8">
               <ul className="mb-2 overflow-y-auto max-h-[400px]">
+                { errorLog && 
+                  <p className="text-red-700"> { errorLog } </p>
+                }
                 {
                   filterTodos.map((todo) => 
                   <RenderData
