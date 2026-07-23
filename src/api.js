@@ -13,7 +13,7 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response?.status === 403) {
       localStorage.removeItem("token");
-      window.location.href = "/";
+      window.location.href = import.meta.env.BASE_URL;
     }
     return Promise.reject(error);
   }

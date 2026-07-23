@@ -7,4 +7,5 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  base: '/2026-07-20-todo-list-react/'
 })
