@@ -19,6 +19,7 @@ const SignInInput = ({ label, name, register, required, rules = {}, errors, ...p
 )
 
 function SignIn () {
+  const navigate = useNavigate();
   const [errorLog, setErrorLog] = useState('');
 
   const {

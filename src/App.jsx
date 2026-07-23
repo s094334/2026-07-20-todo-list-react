@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router";
 import Login from './components/Login'
 import Register from './components/Register'
+import Todolist from './components/Todo'
 
 function App() {
   return (
