@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router'
-import { fields, subTitle } from './data'
-import { signUp } from '../../api'
+import { signIn } from '../../api'
+import { fields, subTitle } from "./data"
 
-const Input = ({ label, name, register, required, rules = {}, errors, ...props }) => (
+const SignInInput = ({ label, name, register, required, rules = {}, errors, ...props }) => (
   <>
     <label className="text-sm font-bold mt-4 mb-1" htmlFor={name}>{label}</label>
     <input 
@@ -18,58 +18,54 @@ const Input = ({ label, name, register, required, rules = {}, errors, ...props }
   </>
 )
 
-function Form() {
-  let navigate = useNavigate();
+function SignIn () {
   const [errorLog, setErrorLog] = useState('');
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
-    handleSubmit 
-  } = useForm();
+  } = useForm()
 
   const onSubmit = async (data) => {
     setErrorLog(''); 
     try {
-      await signUp(data.email, data.password, data.name);
-      alert('恭喜成功註冊，歡迎加入');
-      navigate('/');
+      const result = await signIn(data.email, data.password);
+      localStorage.setItem('nickname', result.nickname);
+      localStorage.setItem('token', result.token);
 
     } catch (error) {
-      console.log(error.response?.data?.message);
       setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
     }
   }
 
   return (
     <div>
-      <form className="flex flex-col ml-0 md:ml-[100px]" onSubmit={handleSubmit(onSubmit)}>
-        <h2 className="font-bold mb-6 text-xl text-center md:text-2xl md:text-left">
-          { subTitle }
+      <form className="flex flex-col ml-0 sm:ml-[100px]" onSubmit={ handleSubmit(onSubmit) }>
+        <h2 className="font-bold mb-6 text-xl text-center sm:text-2xl sm:text-left">
+          最實用的線上待辦事項服務
         </h2>
         {
-          fields.map((field) => (
-            <Input key={field.name} {...field} register={ register } errors={errors} />
-          ))
+          fields.map((field) => <SignInInput key={field.name} {...field} register={ register } errors={errors} />)
         }
         <button
-          type="submit"
           className="w-32 h-12 rounded-[10px] bg-[#333] text-white self-center my-6 font-bold cursor-pointer text-center text-base"
+          type="submit"
         >
-          註冊帳號
+          登入
         </button>
         { errorLog && 
           <p className="text-red-700 text-center mb-3"> { errorLog } </p>
         }
         <Link
-          to="/"
+          to='/register'
           className="block text-[#333] font-bold no-underline text-center"
         >
-          登入
+          註冊帳號
         </Link>
       </form>
     </div>
   )
-};
+}
 
-export default Form;
+export default SignIn;

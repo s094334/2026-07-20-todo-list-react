@@ -17,3 +17,18 @@ export async function signUp(signUpEmail, signUpPwd, nickName) {
     throw error;
   }
 }
+
+export async function signIn(signInEmail, signInPwd) {
+  try {
+    const { data } = await axios.post(`${baseUrl}/users/sign_in`,
+      {
+        "email": signInEmail,
+        "password": signInPwd
+      }
+    );
+    return data;
+
+  } catch (error) {
+    throw error;
+  }
+}
