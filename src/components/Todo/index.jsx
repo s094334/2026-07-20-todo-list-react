@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import Nav from "./Nav"
 import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
@@ -11,23 +12,28 @@ function Todolist () {
   const [filter, setFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [errorLog, setErrorLog] = useState('');
-  console.log("error", errorLog);
 
   useEffect(() => {
+    const abortController = new AbortController();
     const todos = async () => {
       setIsLoading(true);
-      setErrorLog(''); 
+      setErrorLog('');
       try {
-        const data = await getTodos();
+        const data = await getTodos(
+          {
+            signal: abortController.signal
+          });
         setTodos(data);
       } catch (error) {
+        if (axios.isCancel(error)) return;
         setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
       } finally {
-      setIsLoading(false);
-    }
+        setIsLoading(false);
+      }
     };
 
     todos();
+    return () => abortController.abort();
   }, [])
 
   const handleAddTodo = async (content) => {
@@ -113,6 +119,7 @@ function Todolist () {
   }
 
   return (
+
     <section
       id="todoListPage"
       className="bg-[linear-gradient(175deg,#FFD370_100%,#fff_0%)] md:bg-[linear-gradient(175deg,#FFD370_60%,#fff_40%)]"

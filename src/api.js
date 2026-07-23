@@ -2,12 +2,13 @@ import axios from "axios";
 
 const baseUrl = "https://todolist-api.hexschool.io";
 
-export async function getTodos() {
+export async function getTodos(config) {
   try {
     const { data } = await axios.get(`${baseUrl}/todos/`,{
       headers: {
         Authorization: token,
       },
+      ...config
     })
     return data.data;
 
