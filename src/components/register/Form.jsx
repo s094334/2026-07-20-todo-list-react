@@ -1,7 +1,8 @@
+import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { Link, useNavigate } from 'react-router'
 import { fields, subTitle } from './data'
 import { signUp } from '../../api'
-import { Link } from 'react-router'
 
 const Input = ({ label, name, register, required, rules = {}, errors, ...props }) => (
   <>
@@ -9,21 +10,35 @@ const Input = ({ label, name, register, required, rules = {}, errors, ...props }
     <input 
       id={name} 
       className="font-normal bg-white rounded-[10px] w-[304px] px-4 py-3 my-1 placeholder:text-[#9F9A91]"
-      {...props}  
+      {...props}
       {...register(name, { required, ...rules })}/>
     {errors[name] && (
-        <p role="alert" className="text-red-600 text-sm mt-1">{ errors[name].message }</p>
+        <p className="text-red-600 text-sm mt-1">{ errors[name].message }</p>
     )}
   </>
 )
 
 function Form() {
+  let navigate = useNavigate();
+  const [errorLog, setErrorLog] = useState('');
+
   const {
     register,
     formState: { errors },
-    handleSubmit } = useForm()
+    handleSubmit 
+  } = useForm();
+
   const onSubmit = async (data) => {
-    await signUp(data.email, data.password, data.name)
+    setErrorLog(''); 
+    try {
+      await signUp(data.email, data.password, data.name);
+      alert('恭喜成功註冊，歡迎加入');
+      navigate('/');
+
+    } catch (error) {
+      console.log(error.response?.data?.message);
+      setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
+    }
   }
 
   return (
@@ -34,14 +49,18 @@ function Form() {
         </h2>
         {
           fields.map((field) => (
-            <Input key={field.name} {...field} register={register} errors={errors} />
+            <Input key={field.name} {...field} register={ register } errors={errors} />
           ))
         }
-        <input
-          className="w-32 h-12 rounded-[10px] bg-[#333] text-white self-center my-6 font-bold cursor-pointer text-center text-base"
+        <button
           type="submit"
-          defaultValue="註冊帳號"
-        />
+          className="w-32 h-12 rounded-[10px] bg-[#333] text-white self-center my-6 font-bold cursor-pointer text-center text-base"
+        >
+          註冊帳號
+        </button>
+        { errorLog && 
+          <p className="text-red-700 text-center mb-3"> { errorLog } </p>
+        }
         <Link
           to="/"
           className="block text-[#333] font-bold no-underline text-center"
