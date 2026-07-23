@@ -2,6 +2,23 @@ import axios from "axios";
 
 const baseUrl = "https://todolist-api.hexschool.io";
 
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = token;
+  return config;
+});
+
+axios.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 403) {
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    }
+    return Promise.reject(error);
+  }
+);
+
 export async function signUp(signUpEmail, signUpPwd, nickName) {
   try {
     const { data } = await axios.post(`${baseUrl}/users/sign_up`,
@@ -11,6 +28,7 @@ export async function signUp(signUpEmail, signUpPwd, nickName) {
         "nickname": nickName
       }
     );
+    return data;
   } catch (error) {
       throw error;
     }
@@ -33,9 +51,6 @@ export async function signIn(signInEmail, signInPwd) {
 export async function getTodos(config) {
   try {
     const { data } = await axios.get(`${baseUrl}/todos/`,{
-      headers: {
-        Authorization: token,
-      },
       ...config
     })
 
@@ -49,12 +64,7 @@ export async function getTodos(config) {
 export async function addTodo(content) {
   try {
     const { data } = await axios.post(`${baseUrl}/todos/`,
-      { content },
-      {
-        headers: {
-          Authorization: token,
-        }
-      }
+      { content }
     );
     return data.newTodo;
 
@@ -65,13 +75,7 @@ export async function addTodo(content) {
 
 export async function deleteTodo(id) {
   try {
-    const { data } = await axios.delete(`${baseUrl}/todos/${id}`,
-      {
-        headers: {
-          Authorization: token,
-        }
-      }
-    );
+    const { data } = await axios.delete(`${baseUrl}/todos/${id}`);
     
   } catch (error) {
     throw error
@@ -80,14 +84,7 @@ export async function deleteTodo(id) {
 
 export async function toggleStatus(id) {
   try {
-    const { data } = await axios.patch(`${baseUrl}/todos/${id}/toggle`,
-      "",
-      {
-        headers: {
-          Authorization: token,
-        }
-      }
-    );
+    const { data } = await axios.patch(`${baseUrl}/todos/${id}/toggle`);
 
   } catch(error) {
     throw error
@@ -97,12 +94,7 @@ export async function toggleStatus(id) {
 export async function editTodo(id, content) {
   try {
     const { data } = await axios.put(`${baseUrl}/todos/${id}`,
-      { content },
-      {
-        headers: {
-          Authorization: token,
-        }
-      }
+      { content }
     );
 
   } catch(error) {

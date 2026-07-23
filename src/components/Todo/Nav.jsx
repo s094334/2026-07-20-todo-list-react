@@ -1,5 +1,13 @@
+import { Link } from "react-router";
 
 function Nav() {
+  const nickName = localStorage.getItem("nickname")
+
+  const handleLogOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('nickname');
+  }
+
   return (
     <nav className="flex justify-between px-8 pt-6 mb-4 md:mb-0">
       <h1>
@@ -11,18 +19,15 @@ function Nav() {
         </a>
       </h1>
       <ul className="flex text-base">
-        <li className="hidden mt-[11px] md:block md:mt-0">
-          <a href="#" className="ml-0 text-[#333] no-underline hover:text-[#d87355] md:ml-6">
-            <span className="font-bold" />
-          </a>
-        </li>
+        <li className="ml-0 text-[#333] hover:text-[#d87355] md:ml-6">{ nickName } 的待辦清單</li>
         <li className="mt-[11px] md:mt-0">
-          <a
-            href="#loginPage"
+          <Link
+            to="/"
             className="ml-0 text-[#333] no-underline hover:text-[#d87355] md:ml-6"
+            onClick={ handleLogOut }
           >
             登出
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

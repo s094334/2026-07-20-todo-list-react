@@ -119,7 +119,6 @@ function Todolist () {
   }
 
   return (
-
     <section
       id="todoListPage"
       className="bg-[linear-gradient(175deg,#FFD370_100%,#fff_0%)] md:bg-[linear-gradient(175deg,#FFD370_60%,#fff_40%)]"
