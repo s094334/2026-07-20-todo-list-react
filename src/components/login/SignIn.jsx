@@ -33,6 +33,7 @@ function SignIn () {
       const result = await signIn(data.email, data.password);
       localStorage.setItem('nickname', result.nickname);
       localStorage.setItem('token', result.token);
+      navigate('/todolist');
 
     } catch (error) {
       setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
