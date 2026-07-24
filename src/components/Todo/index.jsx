@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Nav from "./Nav"
-import AddBtn from "./AddBtn";
+import AddTodoForm from "./AddTodoForm";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
-import RenderData from "./RenderData"
-import { getTodos, addTodo, deleteTodo, toggleStatus, editTodo } from "../../api";
+import TodoListItem from "./TodoListItem"
+import { getTodos, postTodo, deleteTodo, toggleStatus, putTodo } from "../../apis";
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
@@ -33,14 +33,14 @@ function Todolist () {
     };
 
     todos();
-    return () => abortController.abort();
+    return () => console.log("hello");
   }, [])
 
-  const handleAddTodo = async (content) => {
+  const handlePostTodo = async (content) => {
     setIsLoading(true);
     setErrorLog(''); 
     try {
-      const result = await addTodo(content);
+      const result = await postTodo(content);
       setTodos((todos) => [...todos, result]);
     } catch (error) {
       setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
@@ -75,11 +75,11 @@ function Todolist () {
     }
   }
 
-  const handleEditTodo = async (id, content) => {
+  const handlePutTodo = async (id, content) => {
     setIsLoading(true);
     setErrorLog('');
     try {
-      await editTodo(id, content);
+      await putTodo(id, content);
       setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, content} : todo));
     } catch (error) {
       setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
@@ -88,7 +88,7 @@ function Todolist () {
     }
   }
 
-  const filterTodos = todos.filter((todo) => {
+  const filteredTodos = todos.filter((todo) => {
     switch (filter) {
       case 'pending':
         return !todo.status;
@@ -126,17 +126,18 @@ function Todolist () {
       <Nav />
       <div className="h-screen mx-auto px-8 py-4">
         <div className="w-full mx-auto md:w-[500px]">
-          <AddBtn onAdd={ handleAddTodo } isLoading={ isLoading }/>
+          <AddTodoForm onAdd={ handlePostTodo } isLoading={ isLoading }/>
           <div className="bg-white rounded-[10px] shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
             <ul className="flex justify-evenly">
               {
                 filterTabs.map((filterTab) => {
                   return (
-                    <FilterTodoBtn 
-                      key={ filterTab.dataTab } 
-                      {...filterTab}
-                      isSelected={filter === filterTab.dataTab}
-                      onFilter={ setFilter }/>
+                    <li className="w-full" key={ filterTab.dataTab } >
+                      <FilterTodoBtn 
+                        {...filterTab}
+                        isSelected={filter === filterTab.dataTab}
+                        onFilter={ setFilter }/>
+                    </li>
                 )})
               }
             </ul>
@@ -146,18 +147,20 @@ function Todolist () {
                   <p className="text-red-700"> { errorLog } </p>
                 }
                 {
-                  filterTodos.map((todo) => 
-                  <RenderData
+                  filteredTodos.map((todo) => 
+                  <TodoListItem
                     key={todo.id} 
                     {...todo}
                     onDelete={ handleDeleteTodo }
                     onToggle={ handleToggleStatus }
-                    onEdit={ handleEditTodo } />)
-                }
+                    onEdit={ handlePutTodo } 
+                  />
+                )}
               </ul>
               <div className="flex justify-between">
                 <p className="text-sm text-[#333]"> {completedTodos.length} 個已完成項目</p>
-                <button 
+                <button
+                  type="button"
                   className="text-sm text-[#9F9A91] cursor-pointer" onClick={ handleClearCompleted }>
                   清除已完成項目
                 </button>

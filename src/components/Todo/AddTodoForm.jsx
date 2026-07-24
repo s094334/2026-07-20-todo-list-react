@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 
-function AddBtn ({ onAdd, isLoading }) {
+function AddTodoForm ({ onAdd, isLoading }) {
   const {
     register,
     formState: { errors },
@@ -37,4 +37,4 @@ function AddBtn ({ onAdd, isLoading }) {
   )
 };
 
-export default AddBtn;
+export default AddTodoForm;
