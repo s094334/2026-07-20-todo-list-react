@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import EditTodoForm from "./EditTodoForm";
+import DisplayTodo from "./DisplayTodo";
 
-function RenderData({ id, status, content, onDelete, onToggle, onEdit }) {
+function TodoListItem({ id, status, content, onDelete, onToggle, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const {
@@ -23,19 +25,7 @@ function RenderData({ id, status, content, onDelete, onToggle, onEdit }) {
           checked={status}
           onChange={() => onToggle(id) }
         />
-        { isEditing ?
-          <form onSubmit={ handleSubmit(onSubmit) } >
-            <input
-              className="border border-gray-400 rounded px-1 py-2" 
-              defaultValue={ content }
-              { ...register("newContent") }
-              onBlur={ handleSubmit(onSubmit) }/>
-          </form>
-          :
-          <span className="transition-all duration-[400ms] peer-checked:text-[#9F9A91] peer-checked:line-through">
-            { content }
-          </span>
-        }
+        { isEditing ? <EditTodoForm /> : <DisplayTodo /> }
       </label>
       <button
         onClick={() => setIsEditing(!isEditing)}
@@ -51,4 +41,4 @@ function RenderData({ id, status, content, onDelete, onToggle, onEdit }) {
   )
 };
 
-export default RenderData;
+export default TodoListItem;

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router'
-import { signIn } from '../../api'
+import { signIn } from '../../apis'
 import { fields, subTitle } from "./data"
 
 const SignInInput = ({ label, name, register, required, rules = {}, errors, ...props }) => (

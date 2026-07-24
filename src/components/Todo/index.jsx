@@ -4,7 +4,7 @@ import Nav from "./Nav"
 import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
-import RenderData from "./RenderData"
+import TodoListItem from "./TodoListItem"
 import { getTodos, postTodo, deleteTodo, toggleStatus, putTodo } from "../../apis";
 
 function Todolist () {
@@ -147,7 +147,7 @@ function Todolist () {
                 }
                 {
                   filterTodos.map((todo) => 
-                  <RenderData
+                  <TodoListItem
                     key={todo.id} 
                     {...todo}
                     onDelete={ handleDeleteTodo }

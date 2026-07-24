@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router'
 import { fields, subTitle } from './data'
-import { signUp } from '../../api'
+import { signUp } from '../../apis'
 
 const Input = ({ label, name, register, required, rules = {}, errors, ...props }) => (
   <>
