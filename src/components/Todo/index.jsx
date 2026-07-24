@@ -132,11 +132,12 @@ function Todolist () {
               {
                 filterTabs.map((filterTab) => {
                   return (
-                    <FilterTodoBtn 
-                      key={ filterTab.dataTab } 
-                      {...filterTab}
-                      isSelected={filter === filterTab.dataTab}
-                      onFilter={ setFilter }/>
+                    <li className="w-full" key={ filterTab.dataTab } >
+                      <FilterTodoBtn 
+                        {...filterTab}
+                        isSelected={filter === filterTab.dataTab}
+                        onFilter={ setFilter }/>
+                    </li>
                 )})
               }
             </ul>

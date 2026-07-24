@@ -1,15 +1,9 @@
-import { useForm } from "react-hook-form";
 import { useState } from "react";
 import EditTodoForm from "./EditTodoForm";
 import DisplayTodo from "./DisplayTodo";
 
 function TodoListItem({ id, status, content, onDelete, onToggle, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
-
-  const {
-    register,
-    formState: { errors },
-    handleSubmit } = useForm()
   
   const onSubmit = async (data) => {
     await onEdit(id, data.newContent);
@@ -25,7 +19,7 @@ function TodoListItem({ id, status, content, onDelete, onToggle, onEdit }) {
           checked={status}
           onChange={() => onToggle(id) }
         />
-        { isEditing ? <EditTodoForm /> : <DisplayTodo /> }
+        { isEditing ? <EditTodoForm content={content} onSubmit={ onSubmit } /> : <DisplayTodo content={content} /> }
       </label>
       <button
         onClick={() => setIsEditing(!isEditing)}
