@@ -61,7 +61,7 @@ export async function getTodos(config) {
   }
 }
 
-export async function addTodo(content) {
+export async function postTodo(content) {
   try {
     const { data } = await axios.post(`${baseUrl}/todos/`,
       { content }
@@ -91,7 +91,7 @@ export async function toggleStatus(id) {
   }
 }
 
-export async function editTodo(id, content) {
+export async function putTodo(id, content) {
   try {
     const { data } = await axios.put(`${baseUrl}/todos/${id}`,
       { content }

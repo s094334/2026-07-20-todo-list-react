@@ -5,7 +5,7 @@ import AddBtn from "./AddBtn";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
 import RenderData from "./RenderData"
-import { getTodos, addTodo, deleteTodo, toggleStatus, editTodo } from "../../api";
+import { getTodos, postTodo, deleteTodo, toggleStatus, putTodo } from "../../apis";
 
 function Todolist () {
   const [todos, setTodos] = useState([]);
@@ -33,14 +33,14 @@ function Todolist () {
     };
 
     todos();
-    return () => abortController.abort();
+    return () => console.log("hello");
   }, [])
 
-  const handleAddTodo = async (content) => {
+  const handlePostTodo = async (content) => {
     setIsLoading(true);
     setErrorLog(''); 
     try {
-      const result = await addTodo(content);
+      const result = await postTodo(content);
       setTodos((todos) => [...todos, result]);
     } catch (error) {
       setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
@@ -75,11 +75,11 @@ function Todolist () {
     }
   }
 
-  const handleEditTodo = async (id, content) => {
+  const handlePutTodo = async (id, content) => {
     setIsLoading(true);
     setErrorLog('');
     try {
-      await editTodo(id, content);
+      await putTodo(id, content);
       setTodos((todos) => todos.map((todo) => todo.id === id ? { ...todo, content} : todo));
     } catch (error) {
       setErrorLog(error.response?.data?.message || "發生錯誤，請稍後再試")
@@ -126,7 +126,7 @@ function Todolist () {
       <Nav />
       <div className="h-screen mx-auto px-8 py-4">
         <div className="w-full mx-auto md:w-[500px]">
-          <AddBtn onAdd={ handleAddTodo } isLoading={ isLoading }/>
+          <AddBtn onAdd={ handlePostTodo } isLoading={ isLoading }/>
           <div className="bg-white rounded-[10px] shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
             <ul className="flex justify-evenly">
               {
@@ -152,7 +152,7 @@ function Todolist () {
                     {...todo}
                     onDelete={ handleDeleteTodo }
                     onToggle={ handleToggleStatus }
-                    onEdit={ handleEditTodo } />)
+                    onEdit={ handlePutTodo } />)
                 }
               </ul>
               <div className="flex justify-between">
