@@ -4,19 +4,22 @@ import { Link, useNavigate } from 'react-router'
 import { fields, subTitle } from './data'
 import { signUp } from '../../apis'
 
-const Input = ({ label, name, register, required, rules = {}, errors, ...props }) => (
-  <>
-    <label className="text-sm font-bold mt-4 mb-1" htmlFor={name}>{label}</label>
-    <input 
-      id={name} 
-      className="font-normal bg-white rounded-[10px] w-[304px] px-4 py-3 my-1 placeholder:text-[#9F9A91]"
-      {...props}
-      {...register(name, { required, ...rules })}/>
-    {errors[name] && (
-      <p className="text-red-600 text-sm mt-1">{ errors[name].message }</p>
-    )}
-  </>
-)
+const Input = ({ label, name, register, required, rules = {}, errors, ...props }) => {
+  const fieldError = errors[name];
+  return (
+    <>
+      <label className="text-sm font-bold mt-4 mb-1" htmlFor={name}>{label}</label>
+      <input 
+        id={name}
+        className="font-normal bg-white rounded-[10px] w-[304px] px-4 py-3 my-1 placeholder:text-[#9F9A91]"
+        {...props}
+        {...register(name, { required, ...rules })}/>
+      {fieldError && (
+        <p className="text-red-600 text-sm mt-1">{ fieldError.message }</p>
+      )}
+    </>
+  )
+}
 
 function Form() {
   let navigate = useNavigate();
