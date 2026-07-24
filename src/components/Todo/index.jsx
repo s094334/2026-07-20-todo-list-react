@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Nav from "./Nav"
-import AddBtn from "./AddBtn";
+import AddTodoForm from "./AddTodoForm";
 import { filterTabs } from './data'
 import FilterTodoBtn from "./FilterBtn";
 import TodoListItem from "./TodoListItem"
@@ -88,7 +88,7 @@ function Todolist () {
     }
   }
 
-  const filterTodos = todos.filter((todo) => {
+  const filteredTodos = todos.filter((todo) => {
     switch (filter) {
       case 'pending':
         return !todo.status;
@@ -126,7 +126,7 @@ function Todolist () {
       <Nav />
       <div className="h-screen mx-auto px-8 py-4">
         <div className="w-full mx-auto md:w-[500px]">
-          <AddBtn onAdd={ handlePostTodo } isLoading={ isLoading }/>
+          <AddTodoForm onAdd={ handlePostTodo } isLoading={ isLoading }/>
           <div className="bg-white rounded-[10px] shadow-[0_0_15px_0_rgba(0,0,0,0.15)]">
             <ul className="flex justify-evenly">
               {
@@ -147,18 +147,20 @@ function Todolist () {
                   <p className="text-red-700"> { errorLog } </p>
                 }
                 {
-                  filterTodos.map((todo) => 
+                  filteredTodos.map((todo) => 
                   <TodoListItem
                     key={todo.id} 
                     {...todo}
                     onDelete={ handleDeleteTodo }
                     onToggle={ handleToggleStatus }
-                    onEdit={ handlePutTodo } />)
-                }
+                    onEdit={ handlePutTodo } 
+                  />
+                )}
               </ul>
               <div className="flex justify-between">
                 <p className="text-sm text-[#333]"> {completedTodos.length} 個已完成項目</p>
-                <button 
+                <button
+                  type="button"
                   className="text-sm text-[#9F9A91] cursor-pointer" onClick={ handleClearCompleted }>
                   清除已完成項目
                 </button>
